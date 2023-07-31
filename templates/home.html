@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}
+Dashboard
+{% endblock title %}
+
+{% block content %}
+<div class="row mt-3 pt-3">
+    <div class="col-md-4">
+        <div class="border p-3 shadow">
+            <h4>Viewdata</h4>
+            <hr>
+            <form method="post">
+                {% csrf_token %}
+                <label for="disease">Dsease:</label>
+                {% comment %} {{form2}} {% endcomment %}
+                
+                <select name="disease">
+                  <option value="measle" name="measle">measle</option>
+                  <option value="sickness" name="sickness">sickness</option>
+                  <option value="flue" name="flue">flue</option>
+                  <option value="others" name="others">others</option>
+                </select>
+                <input type="Submit" value="View" class="btn btn-success btn-block mt-3">
+            </form>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div>
+            <canvas id="myChart"></canvas>
+          </div>
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          <script>
+            const ctx = document.getElementById('myChart');
+          
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: [{% for diseases in data %}'{{diseases.name}}',{% endfor %}],
+                datasets: [{
+                  label: '# of Population',
+                  data: [{% for diseases in data %}{{diseases.age}},{% endfor %}],
+                  borderWidth: 1,
+                  backgroundColor:[
+                    'rgb(255,0,0)',
+                    'rgb(0,0,255)',
+                    'rgb(255,215,0,1)',
+                    'rgb(173,255,47,1)',
+                  ]
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }
+            });
+          </script>
+    </div>
+</div>
+{% endblock content %}
